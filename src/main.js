@@ -1,6 +1,21 @@
+/*
+ * @Author: yangyongqian
+ * @Date: 2023-07-01 17:31:30
+ * @Description:入口配置文件
+ */
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 
-createApp(App).use(store).use(router).mount('#app')
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
+import Particles from 'particles.vue3'
+
+createApp(App)
+  .use(Particles)
+  .use(ElementPlus)
+  .use(store)
+  .use(router)
+  .mount('#app')

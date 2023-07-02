@@ -1,6 +1,10 @@
 <template>
   <div>
-    MainBox
+    <div>sidebar</div>
+    <div>navbar</div>
+
+    <router-view></router-view>
+
   </div>
 </template>
 
