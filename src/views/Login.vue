@@ -27,6 +27,7 @@
 </template>
 
 <script setup name="Login">
+import axios from 'axios'
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
 
@@ -58,7 +59,10 @@ const submitForm = () => {
   loginFormRef.value.validate((valid) => {
     if (valid) {
       console.log(loginForm)
-      localStorage.setItem('token', 'yyq')
+      localStorage.setItem('token', 'yyq');
+      axios.get('/users').then(res => {
+        console.log('res=', res)
+      })
       router.push('/index')
     }
   })
