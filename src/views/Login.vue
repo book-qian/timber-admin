@@ -27,6 +27,7 @@
 </template>
 
 <script setup name="Login">
+import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
@@ -58,12 +59,14 @@ const router = useRouter()
 const submitForm = () => {
   loginFormRef.value.validate((valid) => {
     if (valid) {
-      console.log(loginForm)
-      localStorage.setItem('token', 'yyq');
-      axios.get('/users').then(res => {
-        console.log('res=', res)
+      axios.post('/adminapi/user/login', loginForm).then(res => {
+        const { code, error } = res.data
+        if (code === '0') {
+          router.push('/index')
+        } else {
+          ElMessage.error(error || '系统错误')
+        }
       })
-      router.push('/index')
     }
   })
 }
