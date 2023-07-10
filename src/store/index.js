@@ -9,7 +9,8 @@ import createPersistedState from 'vuex-persistedstate'
 export default createStore({
   state: {
     isGetterRouter: false, // 是否已经注册了异步路由
-    isCollapse: false //是否折叠
+    isCollapse: false, //是否折叠
+    userInfo: {} //用户信息
   },
   getters: {},
   mutations: {
@@ -18,6 +19,15 @@ export default createStore({
     },
     updateCollapsed(state) {
       state.isCollapse = !state.isCollapse
+    },
+    updateUserInfo(state, value) {
+      state.userInfo = {
+        ...state.userInfo,
+        ...value
+      }
+    },
+    clearUserInfo(state) {
+      state.userInfo = {}
     }
   },
   actions: {},
@@ -25,7 +35,7 @@ export default createStore({
   plugins: [
     // 持久化存储数据
     createPersistedState({
-      paths: ['isCollapse']
+      paths: ['isCollapse', 'userInfo']
     })
   ]
 })

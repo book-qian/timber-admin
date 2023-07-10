@@ -12,7 +12,7 @@
       <span>企业门户网站管理系统</span>
     </div>
     <div class="right">
-      <span>欢迎admin回来</span>
+      <span>欢迎{{ userInfo.username }}回来</span>
       <el-dropdown>
         <el-icon :size="30" color="white">
           <User />
@@ -31,11 +31,15 @@
 
 <script setup name="TopHeader">
 import { Menu, User } from '@element-plus/icons-vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
 const store = useStore()
 const router = useRouter()
+
+// 用户信息
+const userInfo = computed(() => store.state.userInfo)
 // 折叠
 const collapseHandler = () => {
   store.commit('updateCollapsed')
@@ -50,6 +54,7 @@ const centerHandler = () => {
 const loginOut = () => {
   router.push('/login')
   localStorage.removeItem('token')
+  store.commit('clearUserInfo')
 }
 </script>
 

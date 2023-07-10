@@ -31,6 +31,9 @@ import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const loginForm = reactive({
   username: '',
@@ -60,8 +63,9 @@ const submitForm = () => {
   loginFormRef.value.validate((valid) => {
     if (valid) {
       axios.post('/adminapi/user/login', loginForm).then(res => {
-        const { code, error } = res.data
+        const { code, error, data } = res.data
         if (code === '0') {
+          store.commit('updateUserInfo', data)
           router.push('/index')
         } else {
           ElMessage.error(error || '系统错误')

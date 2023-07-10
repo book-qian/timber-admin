@@ -8,10 +8,6 @@
 </template>
 
 <script setup>
-import axios from 'axios';
-axios.get('/adminapi/home').then(res => {
-  console.log('res', res.data)
-}).catch(err => {
-  console.log(err)
-})
+// import axios from 'axios';
+
 </script>
