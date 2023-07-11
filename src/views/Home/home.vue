@@ -4,11 +4,7 @@
  * @Description:首页组件
 -->
 <template>
-  <el-page-header :icon="null" title="企业门户网站管理系统">
-    <template #content>
-      <span class="text-large font-600 mr-3"> 首页 </span>
-    </template>
-  </el-page-header>
+  <el-page-header :icon="null" title="企业门户网站管理系统" content="首页" />
   <el-card class="box-card">
     <el-row>
       <el-col :span="4">
@@ -35,7 +31,8 @@
   </el-card>
 </template>
 
-<script setup>
+<script setup name="home">
+
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 
