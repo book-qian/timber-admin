@@ -27,21 +27,17 @@
           </el-form-item>
           <el-form-item label="性别" prop="gender">
             <el-select v-model="userForm.gender" placeholder="请选择性别">
-              <el-option v-for="item in selectData" :key="item.value" :value="item.value" :label="item.label">
-              </el-option>
+              <el-option v-for="item in selectData" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="个人简介" prop="indroduction">
             <el-input v-model="userForm.indroduction" type="textarea" placeholder="请输入简介" />
           </el-form-item>
           <el-form-item label="头像" prop="avatar">
-            <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              :show-file-list="false" :auto-upload="false">
-              <img v-if="userForm.avatar" :src="userForm.avatar" class="avatar" />
-              <el-icon v-else class="avatar-uploader-icon">
-                <Plus />
-              </el-icon>
-            </el-upload>
+            <Upload :avatar="userForm.avatar" @upload-change="changeHandler" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm">更新</el-button>
           </el-form-item>
         </el-form>
 
@@ -49,24 +45,28 @@
     </el-col>
   </el-row>
 </template>
-<script setup name="center">
-import { Plus } from '@element-plus/icons-vue'
+<script setup>
+import Upload from '@/components/Upload'
 import { ref, reactive, computed } from 'vue'
 import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
+import { uploadAvatar } from '@/util/upload'
 
 const store = useStore();
-const avatarUrl = computed(() => store.state.userInfo.avatar ? store.state.userInfo.avatar : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+const avatarUrl = computed(() => store.state.userInfo.avatar ? 'http://localhost:3000' + store.state.userInfo.avatar : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 const roleName = computed(() => store.state.userInfo.role === 1 ? '管理员' : '编辑')
 const userName = computed(() => store.state.userInfo.username)
 
-const { username, role, gender, avatar, indroduction } = store.state.userInfo
+
+const { username, role, gender = 1, avatar, indroduction = '' } = store.state.userInfo
 const userFormRef = ref()
 const userForm = reactive({
   username,
   gender,
   role,
   indroduction,
-  avatar
+  avatar,
+  file: null
 })
 const selectData = [
   {
@@ -105,6 +105,27 @@ const userFormRules = reactive({
   ],
 })
 
+// 文件变化时钩子
+const changeHandler = (file) => {
+  userForm.file = file
+  // 上传图片预览
+  userForm.avatar = URL.createObjectURL(file)
+}
+
+// 提交更新
+const submitForm = () => {
+  userFormRef.value.validate(async (valid) => {
+    if (valid) {
+      const { result, code } = await uploadAvatar(userForm, '/adminapi/user/upload')
+      if (code === '0') {
+        store.commit('updateUserInfo', result)
+        ElMessage.success('操作成功')
+      }
+
+    }
+  })
+}
+
 
 </script>
 <style scoped lang="scss">
@@ -115,25 +136,5 @@ const userFormRules = reactive({
     text-align: center;
   }
 
-  ::v-deep .avatar-uploader .el-upload {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-  }
-
-  ::v-deep .avatar-uploader .el-upload:hover {
-    border-color: var(--el-color-primary);
-  }
-
-  ::v-deep .el-icon.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    text-align: center;
-  }
 }
 </style>

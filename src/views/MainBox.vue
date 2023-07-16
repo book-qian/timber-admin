@@ -18,9 +18,13 @@
 <script setup name="MainBox">
 import AsideMenu from '@/components/AsideMenu';
 import TopHeader from '@/components/TopHeader';
-import { onMounted } from 'vue';
 </script>
 
 <style lang="scss" scoped>
+.el-main {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 </style>
 
