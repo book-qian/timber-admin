@@ -12,7 +12,7 @@
         <el-input v-model="userForm.username" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="userForm.password" placeholder="请输入用户名" />
+        <el-input v-model="userForm.password" type="password" placeholder="请输入用户名" />
       </el-form-item>
       <el-form-item label="角色" prop="role">
         <el-select v-model="userForm.role" placeholder="请选择权限">
