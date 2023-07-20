@@ -33,6 +33,8 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
+
+
 const store = useStore()
 
 const loginForm = reactive({
@@ -66,6 +68,8 @@ const submitForm = () => {
         const { code, error, data } = res.data
         if (code === '0') {
           store.commit('updateUserInfo', data)
+          store.commit('updateGetterRouter', false)
+
           router.push('/index')
         } else {
           ElMessage.error(error || '系统错误')

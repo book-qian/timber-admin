@@ -43,11 +43,38 @@
         </el-table-column>
       </el-table>
     </el-card>
+
+    <el-dialog v-model="dialogVisible" title="编辑" width="30%">
+      <el-form ref="userFormRef" :model="userForm" :rules="userFormRules" label-width="80px" status-icon>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="userForm.username" placeholder="请输入用户名" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="userForm.password" show-password type="password" placeholder="请输入密码" />
+        </el-form-item>
+        <el-form-item label="角色" prop="role">
+          <el-select style="width: 100%;" v-model="userForm.role" fit-input-width placeholder="请选择权限">
+            <el-option v-for="item in selectData" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="个人简介" prop="indroduction">
+          <el-input v-model="userForm.indroduction" type="textarea" placeholder="请输入简介" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="confirmHandler">
+            确定
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup name="UserList">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus'
 
@@ -60,8 +87,11 @@ onMounted(() => {
   getTableData()
 })
 
-const handleEdit = (data) => {
-  console.log(data)
+const dialogVisible = ref(false)
+const handleEdit = async (data) => {
+  dialogVisible.value = true
+  const { data: { result = [] } } = await axios.get(`/adminapi/user/list/${data._id}`)
+  Object.assign(userForm, result[0])
 }
 const handleDelete = async ({ _id }) => {
   const { data } = await axios.delete(`/adminapi/user/list/${_id}`)
@@ -71,6 +101,58 @@ const handleDelete = async ({ _id }) => {
   }
 }
 
+const userFormRef = ref()
+const userForm = reactive({
+  username: '',
+  role: 2, // 1管理员 2编辑
+  password: '',
+  indroduction: '',
+})
+
+const userFormRules = reactive({
+  username: [
+    {
+      required: true, message: '请输入用户名', trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true, message: '请输入密码', trigger: 'blur'
+    }
+  ],
+  role: [
+    {
+      required: true, message: '请选择权限', trigger: 'blue'
+    }
+  ],
+  indroduction: [
+    {
+      required: true, message: '请输入简介', trigger: 'blur'
+    }
+  ],
+})
+const selectData = [
+  {
+    label: '管理员',
+    value: 1
+  },
+  {
+    label: '编辑',
+    value: 2
+  },
+]
+
+// 确认更新
+const confirmHandler = () => {
+  userFormRef.value.validate(async (valid) => {
+    if (valid) {
+      await axios.put(`/adminapi/user/list/${userForm._id}`, userForm)
+      dialogVisible.value = false
+      ElMessage.success('操作成功')
+      getTableData()
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>

@@ -18,7 +18,7 @@
         </el-icon>
         <span>个人中心</span>
       </el-menu-item>
-      <el-sub-menu index="/user">
+      <el-sub-menu index="/user" v-admin>
         <template #title>
           <el-icon>
             <user-filled />
@@ -53,7 +53,7 @@
 </template>
 
 <script setup name="AsideMenu">
-import { HomeFilled, Avatar, UserFilled, MessageBox, Reading, Pointer } from '@element-plus/icons-vue'
+import { HomeFilled, Avatar, UserFilled, MessageBox, Pointer } from '@element-plus/icons-vue'
 import { computed } from 'vue';
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -62,6 +62,15 @@ const store = useStore()
 
 const isCollapse = computed(() => store.state.isCollapse)
 const route = useRoute();
+
+// 权限指令
+const vAdmin = {
+  mounted(el) {
+    if (store.state?.userInfo?.role !== 1) {
+      el.parentNode.removeChild(el)
+    }
+  },
+}
 </script>
 
 <style lang="scss" scoped>

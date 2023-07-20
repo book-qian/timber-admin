@@ -19,11 +19,6 @@ const routes = [
     name: 'mainbox',
     path: '/mainbox',
     component: MainBox
-  },
-  {
-    path: '/:pathMatch(.*)',
-    name: '404',
-    component: () => import('@/views/error/404.vue')
   }
 ]
 
@@ -41,8 +36,10 @@ router.beforeEach((to, from, next) => {
     if (localStorage.getItem('token')) {
       // 如果没有注册动态路由
       if (!store.state.isGetterRouter) {
+        // 先清空
+        router.removeRoute('mainbox')
+        // 再注册路由
         loadRouter()
-
         next({
           path: to.fullPath
         })
@@ -59,12 +56,27 @@ router.beforeEach((to, from, next) => {
 })
 
 const loadRouter = () => {
+  // 判断是否有mainbox
+  if (!router.hasRoute('mainbox')) {
+    router.addRoute({
+      name: 'mainbox',
+      path: '/mainbox',
+      component: MainBox
+    })
+  }
+
   asyncRouter.forEach((t) => {
-    router.addRoute('mainbox', t)
+    checkAuthority(t) && router.addRoute('mainbox', t)
   })
 
   // 改变第一次状态
   store.commit('updateGetterRouter', true)
+}
+
+// 检查权限
+const checkAuthority = (item) => {
+  if (!item.requireAdmin) return true
+  return store.state.userInfo.role === 1
 }
 
 export default router

@@ -13,6 +13,9 @@ import AddNews from '@/views/News/AddNews'
 import ProductList from '@/views/Product/ProductList'
 import AddProduct from '@/views/Product/AddProduct'
 
+/**
+ * requireAdmin 是否进行admin权限判断
+ */
 const routers = [
   {
     name: 'index',
@@ -27,12 +30,14 @@ const routers = [
   {
     name: 'userList',
     path: '/userList',
-    component: UserList
+    component: UserList,
+    requireAdmin: true
   },
   {
     name: 'addUser',
     path: '/addUser',
-    component: AddUser
+    component: AddUser,
+    requireAdmin: true
   },
   {
     name: 'newsList',
@@ -57,6 +62,11 @@ const routers = [
   {
     path: '/',
     redirect: '/index'
+  },
+  {
+    path: '/:pathMatch(.*)',
+    name: '404',
+    component: () => import('@/views/error/404.vue')
   }
 ]
 
