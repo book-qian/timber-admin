@@ -50,6 +50,11 @@ const routers = [
     component: AddNews
   },
   {
+    name: 'editNews',
+    path: '/editNews/:id',
+    component: () => import('@/views/News/EditNews')
+  },
+  {
     name: 'productList',
     path: '/productList',
     component: ProductList
@@ -62,11 +67,6 @@ const routers = [
   {
     path: '/',
     redirect: '/index'
-  },
-  {
-    path: '/:pathMatch(.*)',
-    name: '404',
-    component: () => import('@/views/error/404.vue')
   }
 ]
 

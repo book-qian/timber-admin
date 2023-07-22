@@ -10,6 +10,7 @@
       <TopHeader />
       <el-main>
         <router-view></router-view>
+        <router-view name="notFound"></router-view>
       </el-main>
     </el-container>
   </el-container>

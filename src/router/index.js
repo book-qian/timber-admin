@@ -19,6 +19,11 @@ const routes = [
     name: 'mainbox',
     path: '/mainbox',
     component: MainBox
+  },
+  {
+    path: '/:pathMatch(.*)',
+    name: '404',
+    component: () => import('@/views/error/404.vue')
   }
 ]
 

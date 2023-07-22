@@ -1,17 +1,17 @@
 <!--
  * @Author: yangyongqian
- * @Date: 2023-07-01 22:53:40
- * @Description:添加新闻组件
+ * @Date: 2023-07-22 22:08:10
+ * @Description:编辑新闻
 -->
 <template>
   <div>
-    <el-page-header :icon="null" title="新闻管理" content="创建新闻" />
+    <el-page-header title="新闻管理" content="编辑新闻" @back="backHandler" />
     <el-form class="news-form" ref="newsFormRef" :model="newsForm" :rules="newsFormRules" label-width="80px" status-icon>
       <el-form-item label="标题" prop="title">
         <el-input v-model="newsForm.title" placeholder="请输入标题" />
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <Editor @editor-change="editorChange" />
+        <Editor v-if="newsForm.content" :content="newsForm.content" @editor-change="editorChange" />
       </el-form-item>
       <el-form-item label="类别" prop="category">
         <el-select v-model="newsForm.category" placeholder="请选择类别">
@@ -22,20 +22,23 @@
         <Upload :avatar="newsForm.cover" @upload-change="changeHandler" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">创建新闻</el-button>
+        <el-button type="primary" @click="submitForm">更新新闻</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
-<script setup name="AddNews">
-import { ref, reactive } from 'vue';
+<script setup name="editNews">
+import { ref, reactive, onMounted } from 'vue';
 import Editor from '@/components/Editor'
 import Upload from '@/components/Upload'
 import { uploadAvatar } from '@/util/upload'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import axios from 'axios';
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
+const route = useRoute()
 const newsFormRef = ref()
 const newsForm = reactive({
   title: '',
@@ -106,11 +109,23 @@ const changeHandler = (file) => {
 const submitForm = () => {
   newsFormRef.value.validate(async (valid) => {
     if (valid) {
-      await uploadAvatar(newsForm, `/adminapi/news/add`,)
-      router.push('/newsList')
+      await uploadAvatar(newsForm, `/adminapi/news/edit`)
+      ElMessage.success('操作成功')
+      router.back()
     }
   })
 }
+
+const backHandler = () => {
+  router.back()
+}
+
+onMounted(async () => {
+  const { id } = route.params
+  const { data: { result } } = await axios.post(`/adminapi/news/getList/${id}`)
+
+  Object.assign(newsForm, result[0])
+})
 </script>
 
 <style lang="scss" scoped>
@@ -118,4 +133,5 @@ const submitForm = () => {
   margin-top: 30px;
 }
 </style>
+
 
