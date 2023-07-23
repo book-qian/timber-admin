@@ -1,11 +1,11 @@
 <!--
  * @Author: yangyongqian
- * @Date: 2023-07-01 22:55:00
- * @Description:添加产品组件
+ * @Date: 2023-07-23 11:55:00
+ * @Description:修改产品组件
 -->
 <template>
   <div>
-    <el-page-header :icon="null" title="产品管理" content="添加产品" />
+    <el-page-header @back="backHandler" title="产品管理" content="编辑产品" />
 
     <el-form class="product-form" ref="productFormRef" :model="productForm" :rules="productFormRules" label-width="80px"
       status-icon>
@@ -22,18 +22,20 @@
         <Upload :avatar="productForm.cover" @upload-change="changeHandler" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">添加产品</el-button>
+        <el-button type="primary" @click="submitForm">更新产品</el-button>
       </el-form-item>
     </el-form>
 
   </div>
 </template>
 
-<script setup name="AddProduct">
+<script setup name="EditProduct">
 import Upload from '@/components/Upload'
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { uploadAvatar } from '@/util/upload'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 const productFormRef = ref()
 const productForm = reactive({
@@ -74,17 +76,27 @@ const changeHandler = (file) => {
 
 
 const router = useRouter()
+const route = useRoute()
 // 提交更新
 const submitForm = () => {
   productFormRef.value.validate(async (valid) => {
     if (valid) {
-      console.log('product', productForm)
-      await uploadAvatar(productForm, '/adminapi/product/add')
-
+      await uploadAvatar(productForm, '/adminapi/product/edit')
+      ElMessage.success('操作成功')
       router.push('/productList')
     }
   })
 }
+const backHandler = () => {
+  router.back()
+}
+
+onMounted(async () => {
+  const { id } = route.params
+  const { data: { result } } = await axios.post(`/adminapi/product/getList/${id}`)
+
+  Object.assign(productForm, result[0])
+})
 </script>
 
 <style lang="scss" scoped>

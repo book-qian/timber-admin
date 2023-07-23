@@ -65,6 +65,11 @@ const routers = [
     component: AddProduct
   },
   {
+    name: 'editProduct',
+    path: '/editProduct/:id',
+    component: () => import('@/views/Product/EditProduct')
+  },
+  {
     path: '/',
     redirect: '/index'
   }

@@ -26,7 +26,7 @@ onMounted(() => {
   }
   editor.create()
 
-  editor.txt.html(props.content) // 重新设置编辑器内容
+  props.content && editor.txt.html(props.content) // 重新设置编辑器内容
 })
 </script>
 
