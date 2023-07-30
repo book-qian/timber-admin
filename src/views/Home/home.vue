@@ -26,7 +26,7 @@
     <el-carousel v-if="loopData.length" :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in loopData" :key="item._id">
         <div :style="{
-          backgroundImage: `url(http://localhost:3000${item.cover})`,
+          backgroundImage: `url(${process.env.VUE_APP_BASE_API}${item.cover})`,
           backgroundSize: 'cover'
         }">
           <h3 text="2xl" justify="center">{{ item.title }}</h3>
@@ -43,7 +43,7 @@ import { useStore } from 'vuex'
 import axios from 'axios';
 
 const store = useStore()
-const avatarUrl = computed(() => store.state.userInfo.avatar ? 'http://localhost:3000' + store.state.userInfo.avatar : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+const avatarUrl = computed(() => store.state.userInfo.avatar ? process.env.VUE_APP_BASE_API + store.state.userInfo.avatar : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 const welcomeText = computed(() => new Date().getHours() > 12 ? '你可能有些累了，喝杯咖啡提提神吧！' : '开心快乐每一天，加油！')
 
 onMounted(() => {

@@ -33,17 +33,12 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
-
-
 const store = useStore()
-
 const loginForm = reactive({
   username: '',
   password: ''
 })
-
 const loginFormRef = ref()
-
 const loginRules = reactive({
   username: [
     {
@@ -78,6 +73,7 @@ const submitForm = () => {
     }
   })
 }
+
 
 
 // particles 配置

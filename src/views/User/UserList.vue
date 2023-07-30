@@ -12,7 +12,7 @@
         <el-table-column label="头像" width="180">
           <template #default="scope">
             <div v-if="scope.row.avatar">
-              <el-avatar :size="50" :src="`http://localhost:3000${scope.row.avatar}`"></el-avatar>
+              <el-avatar :size="50" :src="`${process.env.VUE_APP_BASE_API}${scope.row.avatar}`"></el-avatar>
             </div>
             <div v-else>
               <el-avatar :size="50"

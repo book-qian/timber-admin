@@ -18,7 +18,7 @@ import { Plus } from '@element-plus/icons-vue'
 import { defineEmits, defineProps, computed } from 'vue';
 
 const uploadUrl = computed(() => {
-  return props.avatar.includes('blob') ? props.avatar : `http://localhost:3000${props.avatar}`
+  return props.avatar.includes('blob') ? props.avatar : `${process.env.VUE_APP_BASE_API}${props.avatar}`
 })
 
 const emit = defineEmits(['upload-change'])
