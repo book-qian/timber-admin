@@ -4,7 +4,7 @@
  * @Description:顶部导航组件
 -->
 <template>
-  <el-header>
+  <el-header class="topHeader">
     <div class="left">
       <el-icon :size="20" @click="collapseHandler">
         <Menu />
@@ -25,12 +25,11 @@
         </template>
       </el-dropdown>
     </div>
-
   </el-header>
 </template>
 
 <script setup name="TopHeader">
-import { Menu, User } from '@element-plus/icons-vue'
+import { Menu, User, ArrowDown } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -59,7 +58,7 @@ const loginOut = () => {
 </script>
 
 <style lang="scss" scoped>
-.el-header {
+.topHeader {
   width: 100%;
   height: 60px;
   line-height: 60px;

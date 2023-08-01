@@ -4,36 +4,38 @@
  * @Description:首页组件
 -->
 <template>
-  <el-page-header :icon="null" title="企业门户网站管理系统" content="首页" />
-  <el-card class="box-card">
-    <el-row>
-      <el-col :span="4">
-        <el-avatar :size="100" :src="avatarUrl" />
-      </el-col>
-      <el-col :span="20">
-        <h3 style="line-height: 100px;">
-          欢迎回来，{{ store.state.userInfo.username }}，{{ welcomeText }}
-        </h3>
-      </el-col>
-    </el-row>
-  </el-card>
-  <el-card class="box-card">
-    <template #header>
-      <div class="card-header">
-        <span>公司产品</span>
-      </div>
-    </template>
-    <el-carousel v-if="loopData.length" :interval="4000" type="card" height="200px">
-      <el-carousel-item v-for="item in loopData" :key="item._id">
-        <div :style="{
-          backgroundImage: `url(${process.env.VUE_APP_BASE_API}${item.cover})`,
-          backgroundSize: 'cover'
-        }">
-          <h3 text="2xl" justify="center">{{ item.title }}</h3>
+  <div>
+    <el-page-header :icon="null" title="企业门户网站管理系统" content="首页" />
+    <el-card class="box-card">
+      <el-row>
+        <el-col :span="4">
+          <el-avatar :size="100" :src="avatarUrl" />
+        </el-col>
+        <el-col :span="20">
+          <h3 style="line-height: 100px;">
+            欢迎回来，{{ store.state.userInfo.username }}，{{ welcomeText }}
+          </h3>
+        </el-col>
+      </el-row>
+    </el-card>
+    <el-card class="box-card">
+      <template #header>
+        <div class="card-header">
+          <span>公司产品</span>
         </div>
-      </el-carousel-item>
-    </el-carousel>
-  </el-card>
+      </template>
+      <el-carousel v-if="loopData.length" :interval="4000" type="card" height="200px">
+        <el-carousel-item v-for="item in loopData" :key="item._id">
+          <div :style="{
+            backgroundImage: `url(${rootUrl}${item.cover})`,
+            backgroundSize: 'cover'
+          }">
+            <h3 text="2xl" justify="center">{{ item.title }}</h3>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+    </el-card>
+  </div>
 </template>
 
 <script setup name="home">
@@ -41,7 +43,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios';
-
+const rootUrl = ref(process.env.VUE_APP_BASE_API)
 const store = useStore()
 const avatarUrl = computed(() => store.state.userInfo.avatar ? process.env.VUE_APP_BASE_API + store.state.userInfo.avatar : 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 const welcomeText = computed(() => new Date().getHours() > 12 ? '你可能有些累了，喝杯咖啡提提神吧！' : '开心快乐每一天，加油！')

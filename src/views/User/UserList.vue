@@ -12,7 +12,7 @@
         <el-table-column label="头像" width="180">
           <template #default="scope">
             <div v-if="scope.row.avatar">
-              <el-avatar :size="50" :src="`${process.env.VUE_APP_BASE_API}${scope.row.avatar}`"></el-avatar>
+              <el-avatar :size="50" :src="`${rootUrl}${scope.row.avatar}`"></el-avatar>
             </div>
             <div v-else>
               <el-avatar :size="50"
@@ -77,7 +77,7 @@
 import { onMounted, ref, reactive } from 'vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus'
-
+const rootUrl = ref(process.env.VUE_APP_BASE_API)
 const tableData = ref([])
 const getTableData = async () => {
   const { data: { result } } = await axios.get('/adminapi/user/list')
